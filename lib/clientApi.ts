@@ -1,7 +1,10 @@
 import { User } from "@/types/user";
 import { nextServer } from "./api";
 import { Note } from "@/types/note";
-import { CheckSessionRequest } from "./serverApi";
+
+interface CheckSessionRequest {
+  success: boolean;
+}
 
 export interface NotesApiResponse {
   notes: Note[];
