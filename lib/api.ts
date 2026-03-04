@@ -14,7 +14,7 @@ import axios from "axios";
 // axios.defaults.baseURL = "https://notehub-api.goit.study/docs";
 
 export const nextServer = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://09-auth-delta-gold.vercel.app/",
   withCredentials: true,
 });
 
