@@ -81,7 +81,7 @@ export interface LoginRequest {
 }
 
 export async function login(data: LoginRequest) {
-  const res = await nextServer.post<User>("auth/login", data);
+  const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
 }
 export const logout = async (): Promise<void> => {
@@ -94,7 +94,7 @@ export const checkSession = async () => {
 };
 
 export async function getMe() {
-  const { data } = await nextServer.get<User>("users/me");
+  const { data } = await nextServer.get<User>("/users/me");
   return data;
 }
 
