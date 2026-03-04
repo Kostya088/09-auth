@@ -67,7 +67,6 @@ export async function deleteNote(id: Note["id"]): Promise<Note> {
 export interface RegisterRequest {
   email: string;
   password: string;
-  username: string;
 }
 
 export async function register(data: RegisterRequest) {
