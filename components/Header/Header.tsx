@@ -5,7 +5,9 @@ import Link from "next/link";
 export default function Header() {
   return (
     <header className={css.header}>
-      <Link href="/">NoteHub</Link>
+      <Link href="/" className={css.brandLink}>
+        NoteHub
+      </Link>
       <nav aria-label="Main Navigation">
         <ul className={css.navigation}>
           <li>
