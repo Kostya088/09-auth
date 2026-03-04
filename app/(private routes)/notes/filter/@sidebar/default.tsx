@@ -1,6 +1,6 @@
 import Link from "next/link";
 import css from "./SidebarNotes.module.css";
-import { tagList } from "@/lib/api";
+import { tagList } from "@/lib/api/api";
 
 export default function SidebarNotes() {
   return (
