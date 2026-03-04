@@ -1,72 +1,30 @@
 import axios from "axios";
-import type { Note } from "@/types/note";
 
-const NOTEHUB_TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+// const NOTEHUB_TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
-export const notesApi = axios.create({
-  baseURL: "https://notehub-public.goit.study/api/notes",
-  headers: {
-    accept: "application/json",
-    Authorization: `Bearer ${NOTEHUB_TOKEN}`,
-  },
+// export const notesApi = axios.create({
+//   baseURL: "http://localhost:3000/api",
+//   headers: {
+//     accept: "application/json",
+//     Authorization: `Bearer ${NOTEHUB_TOKEN}`,
+//   },
+//   withCredentials: true,
+// });
+
+// axios.defaults.baseURL = "https://notehub-api.goit.study/docs";
+
+export const nextServer = axios.create({
+  baseURL: "http://localhost:3000/api",
+  withCredentials: true,
 });
 
 export const tagList = ["Todo", "Work", "Personal", "Meeting", "Shopping"];
 
-interface NotesApiResponse {
-  notes: Note[];
-  totalPages: number;
+interface checkSessionRequest {
+  success: boolean;
 }
 
-type FetchNotesParams = {
-  page: number;
-  query?: string;
-  tag?: string;
+export const checkSession = async () => {
+  const res = await nextServer.get<checkSessionRequest>("auth/session");
+  return res.data.success;
 };
-
-export async function fetchNotes({
-  page,
-  query,
-  tag,
-}: FetchNotesParams): Promise<NotesApiResponse> {
-  try {
-    if (!tag || tag === "all") {
-      const { data } = await notesApi.get<NotesApiResponse>("", {
-        params: { page, perPage: 12, search: query },
-      });
-      return data;
-    }
-    const { data } = await notesApi.get<NotesApiResponse>("", {
-      params: { page, perPage: 12, search: query, tag: tag },
-    });
-    return data;
-  } catch (err) {
-    console.error("Failed to fetch notes:", err);
-    throw err;
-  }
-}
-
-export async function fetchNoteById(id: Note["id"]) {
-  const { data } = await notesApi.get<Note>(`/${id}`);
-  return data;
-}
-
-export interface CreateNoteProps {
-  title: string;
-  content: string;
-  tag: string;
-}
-
-export async function createNote(body: CreateNoteProps): Promise<Note> {
-  try {
-    const { data } = await notesApi.post<Note>("", body);
-    return data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-export async function deleteNote(id: Note["id"]): Promise<Note> {
-  const { data } = await notesApi.delete<Note>(`/${id}`);
-  return data;
-}
