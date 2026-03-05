@@ -27,7 +27,12 @@ export async function fetchNotes({
 }
 
 export async function fetchNoteById(id: Note["id"]) {
-  const { data } = await nextServer.get<Note>(`/${id}`);
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<Note>(`/${id}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
   return data;
 }
 

@@ -2,6 +2,28 @@ import { getServerMe } from "@/lib/api/serverApi";
 import css from "./ProfilePage.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: `Profile`,
+    description: `Profile page`,
+    openGraph: {
+      title: `Profile`,
+      description: `Profile page`,
+      url: `https://09-auth-delta-gold.vercel.app/profile`,
+      images: [
+        {
+          url: `https://ac.goit.global/fullstack/react/notehub-og-meta.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "Note Hub",
+        },
+      ],
+      type: "website",
+    },
+  };
+}
 
 export default async function Profile() {
   const user = await getServerMe();
