@@ -3,6 +3,7 @@ import { FetchNotesParams, NotesApiResponse } from "./clientApi";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
 import { cookies } from "next/headers";
+import { AxiosResponse } from "axios";
 
 export async function fetchNotes({
   page,
@@ -10,14 +11,21 @@ export async function fetchNotes({
   tag,
 }: FetchNotesParams): Promise<NotesApiResponse> {
   try {
+    const cookieStore = await cookies();
+    const headers = {
+      Cookie: cookieStore.toString(),
+    };
+
     if (!tag || tag === "all") {
       const { data } = await nextServer.get<NotesApiResponse>("", {
         params: { page, perPage: 12, search: query },
+        headers,
       });
       return data;
     }
     const { data } = await nextServer.get<NotesApiResponse>("", {
       params: { page, perPage: 12, search: query, tag: tag },
+      headers,
     });
     return data;
   } catch (err) {
@@ -26,7 +34,7 @@ export async function fetchNotes({
   }
 }
 
-export async function fetchNoteById(id: Note["id"]) {
+export async function fetchNoteById(id: Note["id"]): Promise<Note> {
   const cookieStore = await cookies();
   const { data } = await nextServer.get<Note>(`/${id}`, {
     headers: {
@@ -50,7 +58,9 @@ export interface CheckSessionRequest {
   success: boolean;
 }
 
-export const checkServerSession = async () => {
+export const checkServerSession = async (): Promise<
+  AxiosResponse<CheckSessionRequest>
+> => {
   const cookieStore = await cookies();
   const res = await nextServer.get("/auth/session", {
     headers: {
